@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Carbon Footing</string>
+    <string name="btn_income"></string>
+    <string name="btn_transportation"></string>
+    <string name="btn_diet"></string>
+    <string name="btn_utilities"></string>
+    <string name="btn_health"></string>
+    <string name="btn_extras"></string>
+</resources>
