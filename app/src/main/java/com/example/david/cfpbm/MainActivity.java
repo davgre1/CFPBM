@@ -22,8 +22,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -114,21 +118,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         for(int i = 0; i < quotes.size(); i++){
             HashMap<String, String> content = new HashMap<String, String>();
-            content = quotes.get(i);
+
+            content = quotes.get(i);//working
+            String temp = (String) content.get("google_email"); //working
+
+
             if(content.containsValue(content.get("google_email").toString())){
                 textViewName.setText(email);
-            } else {textViewName.setText("TEST");}
+            } else {textViewName.setText("NOT FOUND EMAIL");}
+
+
+            //NOT WORKING YET
+            for(Map.Entry<String, String> entry : content.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                Log.v("KeyVal", (key + " " + value));
+
+                if(value.toString().equals(email.toString())){
+                    textViewName.setText("Found value in Map");
+                    Log.v("EmaiVal", (email + " " + value));
+                } else{
+                    textViewName.setText("Did not Find value in Map");
+                    Log.v("NotEmaiVal", (email + " " + value));
+                }
+
+            }
+
+//            String mm = "dgreen88@uncc.edu";
+//            if(content.containsValue(content.get("google_email"))){
+//                if(temp.equalsIgnoreCase(mm)) {
+//                    textViewName.setText(email);
+//                } else {textViewName.setText("TESTsecond");}
+//
+//            } else {textViewName.setText("TESTfirst");}
         }
 
-
         databaseAccess.close();
-        //Display
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, quotes);
-//        this.listView.setAdapter(adapter);
-
-
-
-        //calcCheck();
     }
 
     @Override
