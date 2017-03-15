@@ -64,17 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         healthButton = (Button)findViewById(R.id.btn_health);
         extrasButton = (Button)findViewById(R.id.btn_extras);
 
-//        //Checks email
-//        this.listView = (ListView) findViewById(R.id.listView);
-//        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
-//        databaseAccess.open();
-//        List<String> quotes = databaseAccess.getQuotes();
-//        databaseAccess.close();
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, quotes);
-//        this.listView.setAdapter(adapter);
-
-
         //Initializing google signin option
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -114,43 +103,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this); //OBJECT
         databaseAccess.open();
 
-        ArrayList<HashMap<String, String>> quotes = databaseAccess.getQuotes();
+        ArrayList<HashMap<String, String>> quotes = databaseAccess.getQuotes(); //takes list from DatabaseAccess
 
         for(int i = 0; i < quotes.size(); i++){
             HashMap<String, String> content = new HashMap<String, String>();
-
-            content = quotes.get(i);//working
-            String temp = (String) content.get("google_email"); //working
-
-
-            if(content.containsValue(content.get("google_email").toString())){
-                textViewName.setText(email);
-            } else {textViewName.setText("NOT FOUND EMAIL");}
-
-
-            //NOT WORKING YET
-            for(Map.Entry<String, String> entry : content.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                Log.v("KeyVal", (key + " " + value));
-
-                if(value.toString().equals(email.toString())){
-                    textViewName.setText("Found value in Map");
-                    Log.v("EmaiVal", (email + " " + value));
-                } else{
-                    textViewName.setText("Did not Find value in Map");
-                    Log.v("NotEmaiVal", (email + " " + value));
+            content = quotes.get(i);//populates HashMap
+            for(String s : content.values()) {
+                //String temp = (String) s.get("google_email"); //grabs values from key
+                if(email.equals("dgreen88@uncc.edu")){
+                    textViewName.setText("Work!");
+                } else {
+                    textViewName.setText("NOT Work!");
                 }
-
             }
+            String temp = (String) content.get("google_email"); //grabs values from key
+            Log.v("temp", temp); //grabs ALL emails from db
 
-//            String mm = "dgreen88@uncc.edu";
-//            if(content.containsValue(content.get("google_email"))){
-//                if(temp.equalsIgnoreCase(mm)) {
-//                    textViewName.setText(email);
-//                } else {textViewName.setText("TESTsecond");}
-//
-//            } else {textViewName.setText("TESTfirst");}
+            //NOT WORKING YET; searches through Map
+//            for(Map.Entry<String, String> entry : content.entrySet()) { //takes key/value pairs
+//                String key = entry.getKey(); //google_email, google_name
+//                String value = entry.getValue(); //values
+//                Log.v("Key/Value", (key + " " + value)); //displays key with right value
+//                textViewName.setText(value);
+//            }
+
         }
 
         databaseAccess.close();

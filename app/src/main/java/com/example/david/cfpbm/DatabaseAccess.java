@@ -65,7 +65,7 @@ public class DatabaseAccess {
         //List<String> list = new ArrayList<>();
         ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> person;
-        Cursor cursor = database.rawQuery("SELECT google_email, google_name FROM user", null);
+        Cursor cursor = database.rawQuery("SELECT google_email, google_name, balanceAmount FROM user", null);
 //        cursor.moveToFirst();
 //        while (!cursor.isAfterLast()) {
 ////            Person person = new Person();
@@ -82,8 +82,8 @@ public class DatabaseAccess {
 //                person.put("google_name", cursor.getString(cursor.getColumnIndex(Person.KEY_NAME)));
                 person.put("google_email", cursor.getString(0));
                 person.put("google_name", cursor.getString(1));
+                person.put("balanceAmount", cursor.getString(2));
                 list.add(person);
-
             } while (cursor.moveToNext());
         }
 
