@@ -1,12 +1,9 @@
 package com.example.david.cfpbm;
 
 import android.content.Intent;
-import android.database.SQLException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,12 +19,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -46,10 +38,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button extrasButton;
     private TextView textViewName;
     private String email, name;
-    private double travelAmount = 23257.98;
+    private String _email = "";
 
     private ListView listView;
-    Person person = new Person();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,53 +72,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sIgnInButton.setOnClickListener(this);
     }
 
-    public void calcCheck(){
-        if(email.equals("dgreen88@uncc.edu")){
-            travelAmount += 200.23;
-            incomeButton.setText("Travelll : $" + df2.format(travelAmount));
-        } else if(email.equals("davidfelygreene@gmail.com")) {
-            travelAmount -= 50.90;
-            incomeButton.setText("Income : $" + df2.format(travelAmount));
-            transportationButton.setText("Transportation : $" + df2.format(travelAmount));
-            dietButton.setText("Diet : $" + df2.format(travelAmount));
-            utilitiesButton.setText("Utilities : $" + df2.format(travelAmount));
-            healthButton.setText("Health : $" + df2.format(travelAmount));
-            extrasButton.setText("Extras : $" + df2.format(travelAmount));
-        }
-    }
-
     public void emailValidation(String email) {
 
-        //Checks email
-        this.listView = (ListView) findViewById(R.id.listView);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this); //OBJECT
         databaseAccess.open();
 
         ArrayList<HashMap<String, String>> quotes = databaseAccess.getQuotes(); //takes list from DatabaseAccess
 
-        for(int i = 0; i < quotes.size(); i++){
-            HashMap<String, String> content = new HashMap<String, String>();
-            content = quotes.get(i);//populates HashMap
-            for(String s : content.values()) {
-                //String temp = (String) s.get("google_email"); //grabs values from key
-                if(email.equals("dgreen88@uncc.edu")){
-                    textViewName.setText("Work!");
-                } else {
-                    textViewName.setText("NOT Work!");
-                }
-            }
-            String temp = (String) content.get("google_email"); //grabs values from key
-            Log.v("temp", temp); //grabs ALL emails from db
+        _email = "'davidfelygreene@gmail.com'";
+        DatabaseAccess repo = new DatabaseAccess(this);
+        Person person = new Person();
+        person = repo.getByEmail(_email);
 
-            //NOT WORKING YET; searches through Map
-//            for(Map.Entry<String, String> entry : content.entrySet()) { //takes key/value pairs
-//                String key = entry.getKey(); //google_email, google_name
-//                String value = entry.getValue(); //values
-//                Log.v("Key/Value", (key + " " + value)); //displays key with right value
-//                textViewName.setText(value);
-//            }
 
-        }
+
+        textViewName.setText(person.getName());
+        incomeButton.setText("$ " + df2.format(Double.parseDouble(person.getIncome())));
+        transportationButton.setText("Travel: $ " + df2.format(Double.parseDouble(person.getTransportation())));
+        dietButton.setText("Diet: $ " + df2.format(Double.parseDouble(person.getDiet())));
+        utilitiesButton.setText("Utilities: $ " + df2.format(Double.parseDouble(person.getUtilities())));
+        healthButton.setText("Health: $ " + df2.format(Double.parseDouble(person.getHealth())));
+        extrasButton.setText("Extras: $ " + df2.format(Double.parseDouble(person.getExtras())));
 
         databaseAccess.close();
     }
@@ -152,9 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             name = new String(acct.getDisplayName());
             email  = new String(acct.getEmail());
             emailValidation(email);
-            //gu.setKEY_email(email);
-            //gu.setKEY_name(name);
-            calcCheck();
             setTitle(email); //sets actionbar to email!
 
         } else { Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show(); }
