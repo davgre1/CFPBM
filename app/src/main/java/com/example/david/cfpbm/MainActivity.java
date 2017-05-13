@@ -1,6 +1,7 @@
 package com.example.david.cfpbm;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -79,14 +80,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ArrayList<HashMap<String, String>> quotes = databaseAccess.getQuotes(); //takes list from DatabaseAccess
 
-        _email = "'davidfelygreene@gmail.com'";
+        _email = ("'" + email + "'").toString();
         DatabaseAccess repo = new DatabaseAccess(this);
         Person person = new Person();
         person = repo.getByEmail(_email);
 
+        Double income = Double.parseDouble(person.getIncome());
+        if(income < 100000) {incomeButton.setTextColor(Color.RED);}
+        else {incomeButton.setTextColor(Color.GREEN);}
 
-
-        textViewName.setText(person.getName());
+        textViewName.setText("Greeting, " + person.getName());
         incomeButton.setText("$ " + df2.format(Double.parseDouble(person.getIncome())));
         transportationButton.setText("Travel: $ " + df2.format(Double.parseDouble(person.getTransportation())));
         dietButton.setText("Diet: $ " + df2.format(Double.parseDouble(person.getDiet())));
